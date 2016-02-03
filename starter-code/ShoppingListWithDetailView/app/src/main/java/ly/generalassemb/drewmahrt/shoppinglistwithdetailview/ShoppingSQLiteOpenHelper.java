@@ -41,6 +41,15 @@ public class ShoppingSQLiteOpenHelper extends SQLiteOpenHelper{
                     COL_ITEM_PRICE + " TEXT, " +
                     COL_ITEM_TYPE + " TEXT )";
 
+    private static ShoppingSQLiteOpenHelper instance;
+
+    public static ShoppingSQLiteOpenHelper getInstance(Context context){
+        if (instance == null){
+            instance = new ShoppingSQLiteOpenHelper(context);
+        }
+        return instance;
+    }
+
     public ShoppingSQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -108,5 +117,78 @@ public class ShoppingSQLiteOpenHelper extends SQLiteOpenHelper{
                 null); // h. limit
 
         return cursor;
+    }
+
+    public String getItemName(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(SHOPPING_LIST_TABLE_NAME,
+                new String[]{COL_ITEM_NAME}, // b. column names
+                COL_ID + " LIKE ?", // c. selections
+                new String[]{String.valueOf(id)}, // d. selections args
+                null, // e. group by
+                null, // f. having
+                null, // g. order by
+                null); // h. limit
+
+        if (cursor.moveToFirst()){
+            return cursor.getString(cursor.getColumnIndex(COL_ITEM_NAME));
+        }else{
+            return "Not Found";
+        }
+    }
+    public String getDescriptionId(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(SHOPPING_LIST_TABLE_NAME,
+                new String[]{COL_ITEM_DESCRIPTION}, // b. column names
+                COL_ID + " LIKE ?", // c. selections
+                new String[]{String.valueOf(id)}, // d. selections args
+                null, // e. group by
+                null, // f. having
+                null, // g. order by
+                null); // h. limit
+
+        if (cursor.moveToFirst()){
+            return cursor.getString(cursor.getColumnIndex(COL_ITEM_DESCRIPTION));
+        }else{
+            return "Not Found";
+        }
+    }
+    public String getPriceName(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(SHOPPING_LIST_TABLE_NAME,
+                new String[]{COL_ITEM_PRICE}, // b. column names
+                COL_ID + " LIKE ?", // c. selections
+                new String[]{String.valueOf(id)}, // d. selections args
+                null, // e. group by
+                null, // f. having
+                null, // g. order by
+                null); // h. limit
+
+        if (cursor.moveToFirst()){
+            return cursor.getString(cursor.getColumnIndex(COL_ITEM_PRICE));
+        }else{
+            return "Not Found";
+        }
+    }
+    public String getTypeName(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(SHOPPING_LIST_TABLE_NAME,
+                new String[]{COL_ITEM_TYPE}, // b. column names
+                COL_ID + " = ?", // c. selections
+                new String[]{String.valueOf(id)}, // d. selections args
+                null, // e. group by
+                null, // f. having
+                null, // g. order by
+                null); // h. limit
+
+        if (cursor.moveToFirst()){
+            return cursor.getString(cursor.getColumnIndex(COL_ITEM_TYPE));
+        }else{
+            return "Not Found";
+        }
     }
 }
